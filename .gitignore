@@ -5,6 +5,7 @@
 *.pyc
 *.dump
 *.pyc
+.rebar
 .idea/
 deps/
 log/
