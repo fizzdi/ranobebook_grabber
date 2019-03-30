@@ -1,0 +1,591 @@
+a {
+    color: white;
+}
+
+html, body {
+    width: 100%;
+}
+
+header {
+    margin: 0;
+    padding: 0;
+    line-height: 40px;
+    z-index: 10000;
+}
+
+nav {
+    color: white;
+    z-index: 1000;
+    white-space: nowrap;
+    /*line-height: 40px;*/
+}
+
+nav .pull-left {
+    max-width: 80%;
+    display: inline-block;
+}
+
+nav .pull-right {
+    display: inline-block;
+    vertical-align: top;
+}
+
+nav.navbar {
+    /*position: fixed;*/
+    width: 100%;
+    top: 0px;
+    border: none;
+    /*height: min-content;*/
+    min-height: auto;
+    margin-bottom: 0;
+}
+
+nav li.active > span{
+    padding: 0 5px 0 5px;
+}
+
+nav li.active:hover {
+    background-color: #22527b;
+}
+
+nav > li a:hover{
+    background-color: inherit;
+}
+
+.navbar-inner {
+    background-color: #337AB7;
+    border-color: #2c699d;
+    background-image: none;
+    text-align-last: justify;
+    text-align: justify;
+  /*  height: 100%;*/
+}
+
+img {
+    width: 80px;
+    height: 80px;
+}
+
+.container_wrapper {
+    width: 100%;
+   /* height: calc(100% - 40px);*/
+}
+
+.menu_cell {
+    width: 100px;
+    display: inline-block;
+    cursor: pointer;
+    margin: 0 10px 0 10px;
+    text-align: center;
+    text-align-last: center;
+    vertical-align: top;
+}
+
+.menu_cell span {
+    display: block;
+}
+
+.menu_slider > input + .menu-panel {
+    display: none;
+}
+
+.menu_slider > input {
+    display: none;
+}
+
+.menu_slider > input:checked + .menu-panel{
+    display: block;
+    position: fixed;
+    background: rgba(174,167,159, 0.8);
+    z-index: 50;
+    height: 100%;
+    top: 40px;
+    white-space: normal;
+    width: min-content;
+    text-align: center;
+    text-align-last: center;
+}
+
+.menu_slider .menu_cell span {
+    color: white;
+}
+
+.nav > li {
+    display: inline-block;
+}
+
+.nav > li.block_name {
+    padding: 0 10px 0 10px;
+    font-weight: bolder;
+    text-transform: uppercase;
+}
+
+.navbar img {
+    width: 20px;
+    height: 20px;
+}
+
+.menu-panel .menu_cell .button_icon {
+    font-size: 50px;
+}
+
+.menu-panel .menu_cell {
+    display: inline-block;
+    cursor: pointer;
+    margin: 10px;
+    text-align: center;
+    text-align-last: center;
+    width: 135px;
+}
+
+
+.menu_slider > label {
+    margin-bottom: 0px;
+    padding: 0 5px 0 5px;
+}
+
+.navbar li ul.sublist {
+    display: none;
+    padding: 0 0 0 0;
+    padding-inline-start: 0;
+}
+
+.navbar li:hover > ul.sublist {
+    display:block;
+    position: absolute;
+    background-color: #337AB7;
+    list-style: none;
+    white-space: nowrap;
+}
+
+nav .pull-left li ul.sublist {
+    /*left: 0;*/
+    right: auto;
+}
+
+nav .pull-right li {
+    padding: 0 5px 0 5px;
+}
+
+nav .pull-right li ul.sublist {
+    left: auto;
+    right: 0;
+}
+
+.pull-left {
+    float: none !important;
+    text-align: left;
+    text-align-last: left;
+}
+
+.pull-right {
+    float: none !important;
+    text-align: right;
+    text-align-last: right;
+}
+
+nav .pull-right > .active .user_panel {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 150px;
+    white-space: nowrap;
+    display: block;
+}
+
+.navbar i {
+    font-size: 1.7vh;
+}
+
+.active, .active > *{
+    cursor: pointer;
+}
+
+.active > span, .active > div {
+    display:inline-block;
+}
+
+span.legend {
+    color: #AEA79F;
+    font-size: 18px;
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.45;
+    padding: 5px 0 5px 10px;
+    display: block;
+    width: 100%;
+    text-transform: uppercase;
+    /*border-bottom: 1px solid #aea79f;*/
+}
+
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.menu_cell > .menu_icon {
+    font-size: 50px;
+}
+
+.menu_min_icon {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+header .horizontal-menu {
+    display: inline-block;
+    list-style: none;
+    padding-inline-start: 0px;
+}
+
+header .horizontal-menu > li{
+    display: inline-block;
+    list-style: none;
+}
+
+header .mobile-menu {
+    display: block;
+    list-style: none;
+    padding-inline-start: 0px;
+    width: 100%;
+}
+
+header .mobile-menu > li{
+    display: block;
+    list-style: none;
+}
+
+.navbar .mobile-menu li:hover > ul.sublist {
+    width: 100%;
+    position: inherit;
+}
+
+.menu_header span {
+    color: #AEA79F;
+    font-size: 18px;
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /*line-height: 1.45;*/
+    padding: 5px 0 5px 10px;
+    text-transform: uppercase;
+}
+
+span.header_light {
+    color: #AEA79F;
+    font-size: 18px;
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /*line-height: 1.45;*/
+    padding: 5px 0 5px 10px;
+}
+
+.menu td {
+    border-top: none !important;
+}
+
+span.button_icon {
+    display: inline-block;
+    padding: 5px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.big_button{
+    text-align: center;
+}
+
+.big_button span.button_icon {
+     font-size: 50px;
+ }
+
+.form-search input, .form-search select {
+    padding: 2px;
+    height: auto;
+    display: inline-block;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    z-index: 1;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.enter_data input, .enter_data select {
+    width: 100%;
+    min-width: 18px;
+}
+
+table.stripy tr:nth-child(2n+1){
+   background-color: #e6e6e6;
+}
+
+table.stripy tr:nth-child(2n){
+   background-color: inherit;
+}
+
+table .header {
+    font-weight: bold;
+}
+
+label.nitrogen_label {
+    display: inline-block;
+    padding: 0 5px 0 5px;
+}
+
+td.button_column, th.button_column {
+    width: 1%;
+    white-space: nowrap;
+    text-align: center;
+    text-align-last: center;
+}
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    border-top: 0;
+    padding: 1px;
+}
+
+.table > tbody > tr > td, .table > tbody > tr > th {
+    vertical-align: middle;
+}
+
+table.sides > tbody > tr > td, table.sides  > tbody > tr > th{
+    padding: 1px;
+    border-left: 1px solid #d5d0c9;
+    border-right: 1px solid #d5d0c9;
+}
+
+div.nitrogen_notice_bar {
+    height: auto;
+}
+
+.spinner {
+    text-align: center;
+    text-align-last: center;
+}
+
+.spinner > img {
+    width: auto;
+    height: auto;
+}
+
+.form-search .weight {
+    width: 100px;
+}
+
+tr.cShow {
+    display: table-row;
+}
+
+tr.cHide {
+    display: none;
+}
+
+div.report_settings {
+    padding-bottom: 8px;
+}
+
+header.sticky {
+     position: fixed;
+     top: 0;
+     width: 100%
+}
+
+header.sticky + div {
+     padding-top: 40px;
+}
+
+.wrapper {
+    overflow: auto;
+    padding: 0 5px 0 5px;
+}
+
+input.datepicker_textbox {
+    width: 80px;
+}
+
+table td.tdlabel {
+    width: 1%;
+}
+
+.feedback {
+    font-size: 20px;
+}
+
+.feedback form {
+    display: inline-block;
+}
+
+.feedback .button_icon {
+    font-size: 36px;
+    vertical-align: inherit;
+}
+
+.table_header {
+    width: 1%;
+}
+
+.weightheader{
+    text-align: center;
+    width: 100%;
+}
+
+.semaphor {
+    display:inline-block;
+    width: auto;
+}
+
+.semaphor .button_icon{
+    width: 50px;
+    height: 50px;
+}
+
+.semaphor .top_row{
+    vertical-align:bottom;
+}
+
+.semaphor .bottom_row{
+    vertical-align:top;
+}
+
+.semaphor .semaphor_icon {
+    width: 50px;
+    height: 80px;
+}
+
+.main_part tr {
+    vertical-align: top;
+}
+
+table.main_part {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: top;
+    overflow: auto;
+}
+
+html.full_screen, .full_screen body {
+    height: 100%;
+}
+
+html.full_screen .container_wrapper, html.full_screen .wrapper {
+    min-height: calc(100vh - 40px);
+    max-height: calc(100vh - 40px);
+    height: calc(100vh - 40px);
+}
+
+.full_screen tr.body > td > div {
+    max-height: 100%;
+    overflow: auto;
+    min-width: 150px;
+    min-height: 440px;
+    border-left: 1px solid #d5d0c9;
+    border-right: 1px solid #d5d0c9;
+    border-top: 2px solid #b6b6b6;
+    padding: 3px;
+ }
+
+.full_screen tr.body > td > div {
+    max-height: 100%;
+    overflow: auto;
+    min-width: 150px;
+    min-height: 440px;
+    height: 100%;
+}
+
+html.full_screen .footer {
+    vertical-align: bottom;
+    border-top: 2px solid #b6b6b6;
+}
+
+tr.footer, tr.header {
+    height: min-content;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.car_list .company_name {
+    text-align: center;
+    font-weight: bolder;
+    background-color: #a4a4a4;
+}
+
+.ui-widget-header {
+    background: #e6e6e6;
+    color: black;
+}
+
+.ui-dialog-content {
+    height: auto !important;
+}
+
+.main_part legend {
+    margin-bottom: 0;
+    text-transform: uppercase;
+    font-weight: bolder;
+}
+
+.weight_row > td {
+    vertical-align: middle;
+}
+
+.weight_row .button_icon {
+    padding: 0 0 0 0;
+}
+
+.weight_row > td > input {
+    display: inline-block;
+    margin: 0 0 0 0;
+}
+
+a {
+    color: black;
+}
+
+a:hover, a:focus {
+    text-decoration: none;
+}
+
+.login > input {
+    display: block;
+    color: black;
+    line-height: initial;
+}
+
+.login {
+    padding: 0 4px 4px 4px;
+    text-align-last: center;
+}
+
+@media only screen and (max-width: 600px) {
+    header .horizontal-menu {
+        display: none;
+        list-style: none;
+        padding-inline-start: 0px;
+        top: 40px;
+        width: 100%;
+    }
+
+    header .horizontal-menu > li{
+        display: block;
+        list-style: none;
+    }
+
+    .navbar .horizontal-menu li:hover > ul.sublist {
+        width: 100%;
+        position: inherit;
+    }
+
+    header.sticky + div {
+         padding-top: 180px;
+    }
+
+    .menu_slider > input:checked + .menu-panel {
+        width: 100%;
+    }
+}

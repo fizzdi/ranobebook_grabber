@@ -1,0 +1,15 @@
+*~
+*.beam
+*.iml
+*.dll
+*.pyc
+*.dump
+*.pyc
+.idea/
+deps/
+log/
+scratch/
+tmp/
+*.so
+*.json
+etc/*.config

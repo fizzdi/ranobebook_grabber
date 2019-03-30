@@ -1,0 +1,129 @@
+#!/bin/sh
+# -*- tab-width:4;indent-tabs-mode:nil -*-
+# ex: ts=4 sw=4 et
+
+RUNNER_SCRIPT_DIR=$(cd ${0%/*} && pwd)
+NODETOOL=$RUNNER_SCRIPT_DIR/nodetool
+NODENAME="ranobebook_grabber"
+
+RUNNER_BASE_DIR=${RUNNER_SCRIPT_DIR%/*}
+RUNNER_ETC_DIR=$RUNNER_BASE_DIR/etc
+RUNNER_LOG_DIR=$RUNNER_BASE_DIR/log
+
+# Note the trailing slash on $PIPE_DIR/
+PIPE_DIR=/tmp/$RUNNER_BASE_DIR/
+RUNNER_USER=
+
+# Make sure this script is running as the appropriate user
+if [ ! -z "$RUNNER_USER" ] && [ `whoami` != "$RUNNER_USER" ]; then
+    exec sudo -u $RUNNER_USER -i $0 $@
+fi
+
+# Identify the script name
+SCRIPT=`basename $0`
+
+
+CONFIG="-config $RUNNER_BASE_DIR/etc/sync -config $RUNNER_BASE_DIR/etc/simple_bridge -config $RUNNER_BASE_DIR/etc/app -config $RUNNER_BASE_DIR/etc/ranobebook_grabber"
+PA="-pa $RUNNER_BASE_DIR/ebin/ $RUNNER_BASE_DIR/deps/*/ebin/"
+
+
+# Make sure CWD is set to the right dir
+cd $RUNNER_BASE_DIR
+
+# Make sure log directory exists
+mkdir -p $RUNNER_BASE_DIR/log
+
+# Setup remote shell command to control node
+#REMSH="$ERTS_PATH/erl $REMSH_NAME_ARG $REMSH_REMSH_ARG $COOKIE_ARG"
+
+# Check the first argument for instructions
+case "$1" in
+    start)
+        # Make sure there is not already a node running
+        RES=`$NODETOOL -sname $NODENAME ping`
+        if [ "$RES" = "pong" ]; then
+            echo "Node is already running!"
+            exit 1
+        fi
+        shift
+        START_OPTION="console"
+                
+        RUN_PARAM=$(printf "\'%s\' " "$@")        
+        mkdir -p $PIPE_DIR
+        run_erl -daemon $PIPE_DIR $RUNNER_LOG_DIR "exec $RUNNER_BASE_DIR/bin/$SCRIPT $START_OPTION" 2>&1
+        echo "Service ranobebook_grabber started"
+        ;;
+
+    stop)
+        # Wait for the node to completely stop...
+        case `uname -s` in
+            Linux|Darwin|FreeBSD|DragonFly|NetBSD|OpenBSD)
+                # PID COMMAND
+                PID=`ps ax -o pid= -o command=|\
+                    grep "\-boot $RUNNER_BASE_DIR"|awk '{print $1}'`
+                ;;
+            SunOS)
+                # PID COMMAND
+                PID=`ps -ef -o pid= -o args=|\
+                    grep "\-boot $RUNNER_BASE_DIR"|awk '{print $1}'`
+                ;;
+            CYGWIN*)
+                # UID PID PPID TTY STIME COMMAND
+                PID=`ps -efW|grep "\-boot $RUNNER_BASE_DIR"|awk '{print $2}'`
+                ;;
+        esac
+        $NODETOOL -sname $NODENAME stop
+        ES=$?
+        if [ "$ES" -ne 0 ]; then
+            exit $ES
+        fi
+        while `kill -0 $PID 2>/dev/null`;
+        do
+            sleep 1
+        done
+        echo "Service ranobebook_grabber stoped"
+        ;;
+
+    restart)
+        ## Restart the VM without exiting the process
+        $NODETOOL -sname $NODENAME restart
+        ES=$?
+        if [ "$ES" -ne 0 ]; then
+            exit $ES
+        fi
+        echo "Service ranobebook_grabber restarted"
+        ;;    
+    ping)
+        ## See if the VM is alive
+        $NODETOOL -sname $NODENAME ping     
+        ES=$?
+        if [ "$ES" -ne 0 ]; then
+            exit $ES
+        fi
+        ;;
+
+    attach)
+        # Make sure a node IS running
+        RES=`$NODETOOL -sname $NODENAME ping`
+        ES=$?
+        if [ "$ES" -ne 0 ]; then
+            echo "Node is not running!"
+            exit $ES
+        fi
+
+        shift
+        exec to_erl $PIPE_DIR
+        ;;
+    console)  
+        ## Command line for ranobebook_grabber application
+        CMD="erl -sname $NODENAME -boot start_sasl $COOKIE $CONFIG $PA -s ranobebook_grabber_app"
+        # Log the startup
+        logger -t "$SCRIPT[$$]" "Starting up"
+        # Start the VM
+        exec $CMD
+        ;;      
+esac
+
+
+
+exit 0

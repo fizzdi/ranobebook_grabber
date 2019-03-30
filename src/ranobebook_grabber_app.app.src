@@ -1,0 +1,8 @@
+{application, ranobebook_grabber_app,
+  [{description, "Mcat application."},
+    {vsn, "1.0"},
+    {registered, []},
+    {applications, [kernel, stdlib, sasl]},
+    {mod, {ranobebook_grabber_app, []}},
+    {env, []}
+  ]}.
