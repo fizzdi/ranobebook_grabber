@@ -151,6 +151,10 @@ get_postgresql_date(Date) ->
   [Day, Month, Year | _] = re:split(Date, "[.\s]"),
   binary_to_list(Year) ++ "-" ++ binary_to_list(Month) ++ "-" ++ binary_to_list(Day).
 
+get_current_timestamp() ->
+  {{Y, Mn, D}, {H, M, S}} = erlang:localtime(),
+  io_lib:format("~B-~2..0B-~2..0B~2..0B~2..0B~2..0B", [Y, Mn, D, H, M, S]).
+
 get_postgresql_date_time({{Y, Mn, D}, {H, M, _S}}) ->
   io_lib:format("~B-~2..0B-~2..0B ~2..0B:~2..0B", [Y, Mn, D, H, M]);
 get_postgresql_date_time({datetime, {{Y, Mn, D}, {H, M, S}}}) ->

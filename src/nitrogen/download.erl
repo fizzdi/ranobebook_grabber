@@ -10,10 +10,20 @@
 
 
 main() ->
-  FilePath = wf:q(filename),
-  [FileName | _] = lists:reverse(re:split(FilePath, "/")),
-  wf:header("Content-Disposition", "attachment; filename=\"" ++ binary_to_list(FileName) ++ "\""),
+  FilePaths = wf:session(files),
   wf:content_type("application/x-download"),
-  {ok, Data} = file:read_file(FilePath), Data.
+  FileName = common:get_current_timestamp() ++ ".zip",
+  wf:header("Content-Disposition", "attachment; filename=\"" ++ FileName ++ "\""),
+  Files = lists:map(
+    fun(FilePath) ->
+      {ok, FileContent} = file:read_file(FilePath),
+      {filename:basename(FilePath), FileContent}
+    end, FilePaths
+  ),
+  ZipName = "tmp/" ++ FileName,
+  zip:create(ZipName, Files),
+  {ok, Data} = file:read_file(ZipName),
+  file:delete(ZipName),
+  Data.
 
 title() -> "Загрузка файлов".

@@ -153,10 +153,7 @@ grab_book(Book) ->
             {ok, Chapter} ->
               pgsql:save_book_chapter(Chapter),
               error_logger:info_msg("Save Book '~ts' chapter '~p': ~ts~n", [Book#book.full_name, Chapter#books_in_fb2.chapter, Chapter#books_in_fb2.file_name]),
-              case Book#book.last_chapter >= 950 of
-                true -> {limit, Book};
-                _ -> {ok, Book}
-              end;
+              {ok, Book};
             {error, Reason} ->
               error_logger:error_msg("Error in save Book '~ts' chapter '~p' reason: ~p~n", [Book#book.full_name, Book#book.last_chapter, Reason])
           end;

@@ -15,7 +15,7 @@
 -include("records.hrl").
 -include("ranobebook_grabber.hrl").
 
--define(CHAPTER_STEP, 3).
+-define(CHAPTER_STEP, 50).
 
 main() -> #template{file = "./priv/templates/bare.html", bindings = [{'THIS_PAGE', ?MODULE}]}.
 
@@ -28,7 +28,7 @@ get_chapter_row(Chapter) ->
   #tablerow{ cells=[
     #tablecell{text = Chapter#books_in_fb2.chapter },
     #tablecell{text = Chapter#books_in_fb2.title },
-    #tablecell{body = #link {text = "Скачать", postback = {download, Chapter#books_in_fb2.file_name}} }
+    #tablecell{body = #link {text = "Скачать", postback = {download, [Chapter#books_in_fb2.file_name]}} }
   ]}.
 
 get_book_row(Book) ->
@@ -43,66 +43,48 @@ get_book_row(Book) ->
   update_book(Book),
   Body.
 
-step(1) ->
-  [
-    #label{text="Enter your name (required)"},
-    #textbox{id=name}
-  ];
-step(2) ->
-  [
-    #label{text="Enter your email address (optional)"},
-    #textbox{id=email, type=email}
-  ];
-step(3) ->
-  [
-    #label{text="Enter your fantasy race (required)"},
-    #dropdown{id=race, options=[
-      {"","Choose Race"},
-      {"Orc","Orc"},
-      {"Human","Human"},
-      {"Elf","Elf"},
-      {"Robot","Robot"}
-    ]},
-    #label{text="Enter your class (Required)"},
-    #dropdown{id=class, options=[
-      {"","Choose Class"},
-      {"Wizard","Wizard"},
-      {"Fighter","Fighter"},
-      {"Thief","Theif"},
-      {"AI Tech","Artificial Intelligence Technician"}
-    ]}
-  ].
 
-wizard_event(wizard) ->
-  [Name, Email, Race, Class] = wf:mq([name, email, race, class]),
-  wf:replace(create_character, #panel{body=[
-    #h3{text="You've created a new character"},
-    "Name: ",Name,#br{},
-    "Email: ",Email,#br{},
-    "Race: ",Race,#br{},
-    "Class: ",Class
-  ]}).
+wizard_event({wizard, Book}) ->
+  update_book(Book).
 
-update_book(Book) ->
-  Titles = ["Name", "Email", "Race"],
-  Steps = [step(1), step(2), step(3)],
-  %%      #wizard{
-%%        id=create_character,
-%%        titles=Titles,
-%%        steps=Steps,
-%%        tag=wizard
-%%      }
- Chapters = pgsql:get_chapters(Book#book.id),
-  wf:replace(defer, Book#book.mnemonic, #table {
+processing_chapters([]) ->
+  [#table {
     rows = [
       #tablerow {cells = [
         #tableheader{text = "Глава"},
         #tableheader{text = "Название"},
         #tableheader{}
+      ]
+      }]
+  }];
+processing_chapters(Chapters) when length(Chapters) =< ?CHAPTER_STEP ->
+  [#table {
+    rows = [
+      #tablerow {cells = [
+        #tableheader{text = "Глава"},
+        #tableheader{text = "Название"},
+        #tableheader{body=#button{
+          text="Скачать",
+          postback = {download, [Chapter#books_in_fb2.file_name || Chapter <- Chapters]
+          }}}
       ]},
       [get_chapter_row(Chapter) || Chapter <- Chapters]
     ]
-  }).
+  }];
+processing_chapters(Chapters) ->
+  {H, T} = lists:split(?CHAPTER_STEP, Chapters),
+  [processing_chapters(H) | processing_chapters(T)].
+
+update_book(Book) ->
+  Chapters = pgsql:get_chapters(Book#book.id),
+  Steps = processing_chapters(Chapters),
+  wf:replace(defer, Book#book.mnemonic,
+    #wizard{
+      id=Book#book.mnemonic,
+      steps=Steps,
+      tag={wizard, Book}
+    }
+  ).
 
 column_center() ->
   Books = pgsql:get_books(),
@@ -117,8 +99,7 @@ column_center() ->
   Body.
 
 grabbing(Book) ->
-  common:debug_message(Book#book.last_chapter),
-  case common:debug_message(grabber:grab_book(Book#book{last_chapter = Book#book.last_chapter + 1})) of
+  case grabber:grab_book(Book#book{last_chapter = Book#book.last_chapter + 1}) of
     {no_free, RBook} ->
       common:flash_msg(lists:concat([RBook#book.full_name, " Глава ", RBook#book.last_chapter, " <b>платная</b>"]));
     {ok, RBook} ->
@@ -135,14 +116,15 @@ event(sync) ->
     fun(Book) ->
       wf:comet(
         fun() ->
-          grabbing(Book#book{last_chapter = Book#book.last_chapter + 1}),
+          grabbing(Book#book{last_chapter = Book#book.last_chapter}),
           wf:wire("location.reload()")
         end
       )
     end, Books
   );
 event({download, FileName}) ->
-  wf:redirect(lists:concat(["download?filename=", FileName]));
+  wf:session(files, FileName),
+  wf:redirect("download");
 event(Event) -> common:event(Event).
 
 event_invalid(_) -> ok.
